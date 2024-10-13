@@ -26,7 +26,7 @@ const (
 	MethodDelete Method = "DELETE"
 )
 
-type Router map[string]func(requestBody []byte) (Response)
+type Router map[string]func(requestBody []byte)Response
 
 func (r Router) HandleFunc(pattern string, handler func([]byte) Response) {
 	r[pattern] = handler
