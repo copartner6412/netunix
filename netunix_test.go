@@ -67,6 +67,9 @@ func TestServerClientInteraction(t *testing.T) {
 	if response.StatusCode != 0 {
 		t.Errorf("expected status code 0, got %d", response.StatusCode)
 	}
+	if response.Error != nil {
+		t.Errorf("expected no error, got %s", response.Error)
+	}
 	if !bytes.Equal(response.Body, expectedBody) {
 		t.Errorf("expected body %q, got %q", expectedBody, response.Body)
 	}

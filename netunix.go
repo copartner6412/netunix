@@ -13,17 +13,30 @@ type Request struct {
 	Body   []byte `json:"body"`
 }
 
-type Response struct {
-	StatusCode int    `json:"status_code"`
-	Body       []byte `json:"body"`
-}
-
 type Method string
 
 const (
 	MethodGet    Method = "GET"
 	MethodPut    Method = "PUT"
 	MethodDelete Method = "DELETE"
+)
+
+type Response struct {
+	StatusCode int    `json:"status_code"`
+	Error      []byte `json:"error"`
+	Body       []byte `json:"body"`
+}
+
+const (
+	StatusCodeSuccessful = iota
+	StatusCodeInvalidPath
+	StatusCodeInvalidRequest
+	StatusCodeInvalidRequestBody
+	StatusCodeResourceNotFound
+	StatusCodeUnauthorizedAccess
+	StatusCodeNothingChanged
+	StatusCodeInternalServerError
+	StatusCodeError
 )
 
 type Router map[string]func(requestBody []byte)Response
