@@ -26,9 +26,9 @@ const (
 	MethodDelete Method = "DELETE"
 )
 
-type Router map[string]func(requestBody []byte) (responseBody []byte)
+type Router map[string]func(requestBody []byte) (Response)
 
-func (r Router) HandleFunc(pattern string, handler func([]byte) []byte) {
+func (r Router) HandleFunc(pattern string, handler func([]byte) Response) {
 	r[pattern] = handler
 }
 
@@ -85,11 +85,8 @@ func (s *Server) Listen() error {
 			}
 
 			// Call the handler for the route and send the response
-			responseBody := handler(request.Body)
-			if err := encoder.Encode(Response{
-				StatusCode: 0, // Success code
-				Body:       responseBody,
-			}); err != nil {
+			response := handler(request.Body)
+			if err := encoder.Encode(response); err != nil {
 				fmt.Fprintf(os.Stderr, "error encoding response: %v\n", err)
 			}
 

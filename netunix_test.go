@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/copartner6412/netunix"
+	netflix "github.com/copartner6412/netunix"
 )
 
 func TestServerClientInteraction(t *testing.T) {
@@ -21,13 +21,16 @@ func TestServerClientInteraction(t *testing.T) {
 	socketFile.Close()
 
 	// Step 2: Create a router and add a simple handler
-	router := make(netunix.Router)
-	router.HandleFunc("GET /hello", func(body []byte) []byte {
-		return []byte("Hello, world!")
+	router := make(netflix.Router)
+	router.HandleFunc("GET /hello", func(body []byte) netflix.Response {
+		return netflix.Response{
+			StatusCode: 0,
+			Body:       []byte("Hello, world!"),
+		}
 	})
 
 	// Step 3: Create and start the server
-	server := netunix.Server{
+	server := netflix.Server{
 		SocketPath: socketPath,
 		Router:     router,
 	}
@@ -43,13 +46,13 @@ func TestServerClientInteraction(t *testing.T) {
 	time.Sleep(100 * time.Millisecond)
 
 	// Step 4: Create a client
-	client := netunix.Client{
+	client := netflix.Client{
 		SocketPath: socketPath,
 	}
 
 	// Step 5: Create a request and send it from the client to the server
-	request := netunix.Request{
-		Method: netunix.MethodGet,
+	request := netflix.Request{
+		Method: netflix.MethodGet,
 		Path:   "/hello",
 		Body:   nil, // No body required for this request
 	}
